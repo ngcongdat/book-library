@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import axios from "axios";
+import classNames from "classnames";
 
 export default class Register extends Component {
   constructor(props) {
@@ -31,9 +32,17 @@ export default class Register extends Component {
       password: this.state.password
     };
 
-    axios.post();
+    axios
+      .post("/api/users/register", newUser)
+      .then(res => console.log(res.data))
+      .catch(err =>
+        this.setState({
+          errors: err.response.data
+        })
+      );
   }
   render() {
+    const { errors } = this.state;
     return (
       <div>
         <h1>Register</h1>
@@ -41,17 +50,20 @@ export default class Register extends Component {
           <FormGroup>
             <Label for="name">Name</Label>
             <Input
-              type="email"
+              className={classNames({ "is-invalid": errors.name })}
+              type="text"
               name="name"
               id="name"
               value={this.state.name}
               onChange={this.onChange}
               placeholder="Your Name"
             />
+            {errors.name && <div class="invalid-feedback">{errors.name}</div>}
           </FormGroup>
           <FormGroup>
             <Label for="email">Email</Label>
             <Input
+              className={classNames({ "is-invalid": errors.email })}
               type="email"
               name="email"
               id="email"
@@ -59,11 +71,13 @@ export default class Register extends Component {
               onChange={this.onChange}
               placeholder="Your Email"
             />
+            {errors.email && <div class="invalid-feedback">{errors.email}</div>}
             <p>Your avatar will be got same email gravatar</p>
           </FormGroup>
           <FormGroup>
             <Label for="password">Password</Label>
             <Input
+              className={classNames({ "is-invalid": errors.password })}
               type="password"
               name="password"
               id="password"
@@ -71,6 +85,9 @@ export default class Register extends Component {
               onChange={this.onChange}
               placeholder="Your Password"
             />
+            {errors.password && (
+              <div class="invalid-feedback">{errors.password}</div>
+            )}
           </FormGroup>
           <Button>Submit</Button>
         </Form>
