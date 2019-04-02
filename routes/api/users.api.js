@@ -4,6 +4,10 @@ const bcrypt = require("bcrypt");
 
 const router = express.Router();
 
+// Load validate
+const validateRegister = require("../../validate/register.validate");
+const validateLogin = require("../../validate/login.validate");
+
 // Load User model
 const User = require("../../models/user.model");
 
@@ -20,9 +24,17 @@ router.get("/test", (req, res) =>
 // @desc    Register user
 // @access  Public
 router.post("/register", (req, res) => {
+  const { errors, isValid } = validateRegister(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
-      return res.status(400).json({ msg: "Email already exists" });
+      errors.email = "Email already exists";
+      return res.status(400).json(errors);
     } else {
       const avatar = gravatar.url(req.body.email, {
         s: "200",
@@ -57,10 +69,17 @@ router.post("/register", (req, res) => {
 router.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  const { errors, isValid } = validateLogin(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
 
   User.findOne({ email }).then(user => {
+    errors.email = "User not found";
     if (!user) {
-      return res.status(400).json({ email: "User not found" });
+      return res.status(400).json(errors);
     }
 
     // Check password
@@ -68,7 +87,8 @@ router.post("/login", (req, res) => {
       if (isMatch) {
         res.json({ msg: "Success" });
       } else {
-        res.status(400).json({ msg: "Password incorrect" });
+        errors.email = "Password incorrect";
+        res.status(400).json(errors);
       }
     });
   });
