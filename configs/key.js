@@ -1,3 +1,3 @@
 module.exports = {
-  mongoRI: 'mongodb://localhost:27017'
-}
+  mongoRI: "mongodb://localhost/books-library"
+};
