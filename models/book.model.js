@@ -7,13 +7,17 @@ const BookSchema = new Schema({
     type: String,
     required: true
   },
-  descripton: {
+  description: {
     type: String,
     required: true
   },
   image: {
     type: String,
     required: true
+  },
+  readTime: {
+    type: Number,
+    default: 0
   }
 });
 
