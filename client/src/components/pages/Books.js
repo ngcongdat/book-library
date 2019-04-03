@@ -26,14 +26,14 @@ export default class Books extends Component {
 
   async componentDidMount() {
     this.setState({
-      books: await axios.get("/api/books/test").then(res => res.data)
+      books: await axios.get("/api/books/showbooks").then(res => res.data)
     });
   }
 
   async changePages(e) {
     this.setState({
       books: await axios
-        .get(`/api/books/test?page=${e.target.name}`)
+        .get(`/api/books/showbooks?page=${e.target.name}`)
         .then(res => res.data)
     });
   }
