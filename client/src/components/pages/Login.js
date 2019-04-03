@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import axios from "axios";
 import classNames from "classnames";
+import { Redirect } from "react-router";
 
 export default class Login extends Component {
   constructor(props) {
@@ -32,7 +33,7 @@ export default class Login extends Component {
 
     axios
       .post("/api/users/login", user)
-      .then(res => console.log(res.data))
+      .then(res => console.log(res.config.data))
       .catch(err =>
         this.setState({
           errors: err.response.data
@@ -72,7 +73,7 @@ export default class Login extends Component {
               placeholder="Your Password"
             />
             {errors.password && (
-              <div class="invalid-feedback">{errors.password}</div>
+              <div className="invalid-feedback">{errors.password}</div>
             )}
           </FormGroup>
           <Button>Submit</Button>
