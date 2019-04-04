@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
 import NavBar from "./components/NavBar";
 import Books from "./components/pages/Books";
@@ -9,6 +9,13 @@ import Register from "./components/pages/Register";
 import "./App.css";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      logged: false
+    };
+  }
+
   render() {
     return (
       <Router>

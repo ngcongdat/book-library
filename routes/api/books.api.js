@@ -9,4 +9,6 @@ const controller = require("../../controllers/book.controller");
 // @access  Public
 router.get("/showbooks", controller.showBooks);
 
+router.get("/book", controller.viewBook);
+
 module.exports = router;

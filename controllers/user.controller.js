@@ -67,6 +67,9 @@ module.exports.login = function(req, res) {
     // Check password
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
+        res.cookie("cookie", user._id, {
+          signed: true
+        });
         res.json({ msg: "Success" });
       } else {
         errors.password = "Password incorrect";

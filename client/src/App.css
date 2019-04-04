@@ -1,0 +1,12 @@
+.viewBooks {
+  padding: 5px;
+  background-color: rgb(79, 132, 255);
+  border-radius: 5px;
+  text-decoration: none;
+  color: #fff;
+}
+
+.viewBooks:hover {
+  text-decoration: none;
+  color: rgb(209, 209, 209);
+}

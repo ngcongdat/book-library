@@ -12,3 +12,15 @@ module.exports.showBooks = function(req, res) {
     res.json(books.sort((a, b) => b.readTime - a.readTime).slice(start, end))
   );
 };
+
+module.exports.viewBook = function(req, res) {
+  var bookId = req.query.b;
+  Book.findById(bookId, async function(err, doc) {
+    if (err) {
+      return res.status(400).json({ mgs: "Book not found" });
+    }
+    doc.readTime = doc.readTime + 1;
+    await doc.save();
+    return Book.find().then(books => res.json(books));
+  });
+};
