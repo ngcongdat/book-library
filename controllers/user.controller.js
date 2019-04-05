@@ -8,6 +8,21 @@ const validateLogin = require("../validate/login.validate");
 // Load User model
 const User = require("../models/user.model");
 
+// Set cookie
+module.exports.cookie = function(req, res) {
+  if (!req.signedCookies.cookie) {
+    res.json({ login: false });
+  } else {
+    res.json({ login: true });
+  }
+};
+
+// Clear cookie
+module.exports.clearCookie = function(req, res) {
+  res.clearCookie("cookie");
+};
+
+// Register
 module.exports.register = function(req, res) {
   const { errors, isValid } = validateRegister(req.body);
 
@@ -48,6 +63,7 @@ module.exports.register = function(req, res) {
   });
 };
 
+// Login
 module.exports.login = function(req, res) {
   const email = req.body.email;
   const password = req.body.password;
@@ -68,6 +84,7 @@ module.exports.login = function(req, res) {
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
         res.cookie("cookie", user._id, {
+          maxAge: 90000,
           signed: true
         });
         res.json({ msg: "Success" });

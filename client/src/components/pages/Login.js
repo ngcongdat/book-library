@@ -19,11 +19,24 @@ export default class Login extends Component {
     this.state = {
       email: "",
       password: "",
-      errors: {}
+      errors: {},
+      cookie: {}
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  async componentDidMount() {
+    this.setState({
+      cookie: await axios.get("/api/users/cookie").then(res => res.data)
+    });
+  }
+
+  async componentDidUpdate() {
+    this.setState({
+      cookie: await axios.get("/api/users/cookie").then(res => res.data)
+    });
   }
 
   onChange(e) {
@@ -44,12 +57,6 @@ export default class Login extends Component {
       .post("/api/users/login", user)
       .then(res => {
         console.log(res.config.data);
-        sessionStorage.setItem("login", "successLogin");
-        this.setState(state => {
-          return {
-            state: state
-          };
-        });
       })
       .catch(err =>
         this.setState({
@@ -59,8 +66,8 @@ export default class Login extends Component {
   }
 
   render() {
-    const { errors } = this.state;
-    if (sessionStorage.getItem("login") === "successLogin") {
+    const { errors, cookie } = this.state;
+    if (cookie.login === true) {
       return <Redirect to="/" />;
     }
 

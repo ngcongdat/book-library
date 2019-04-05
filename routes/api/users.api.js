@@ -5,14 +5,15 @@ const router = express.Router();
 // Load controller
 const controller = require("../../controllers/user.controller");
 
-// @route   GET api/users/test
-// @desc    Tests users route
+// @route   GET api/users/cookie
+// @desc    Set cookie
 // @access  Public
-router.get("/test", (req, res) =>
-  res.json({
-    msg: "Users Works"
-  })
-);
+router.get("/cookie", controller.cookie);
+
+// @route   GET api/users/clear-cookie
+// @desc    Clear cookie
+// @access  Public
+router.get("/clear-cookie", controller.clearCookie);
 
 // @route   POST api/users/register
 // @desc    Register user

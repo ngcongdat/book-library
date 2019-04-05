@@ -22,7 +22,8 @@ export default class Books extends Component {
     this.state = {
       books: [],
       page: 1,
-      perPage: 9
+      perPage: 9,
+      logged: {}
     };
     this.changePages = this.changePages.bind(this);
     this.readBook = this.readBook.bind(this);
@@ -30,6 +31,7 @@ export default class Books extends Component {
 
   async componentDidMount() {
     this.setState({
+      logged: await axios.get("/api/users/cookie").then(res => res.data),
       books: await axios.get("/api/books/showbooks").then(res => res.data)
     });
   }
@@ -57,8 +59,8 @@ export default class Books extends Component {
   }
 
   render() {
-    const { books } = this.state;
-    if (sessionStorage.getItem("login") !== "successLogin") {
+    const { books, logged } = this.state;
+    if (logged.login === false) {
       return <Redirect to="/login" />;
     }
 

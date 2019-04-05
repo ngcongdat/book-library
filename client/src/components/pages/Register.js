@@ -49,7 +49,9 @@ export default class Register extends Component {
         sessionStorage.setItem("register", "successRegister");
         this.setState(state => {
           return {
-            state: state
+            name: "",
+            email: "",
+            password: ""
           };
         });
       })
@@ -62,7 +64,7 @@ export default class Register extends Component {
   render() {
     const { errors } = this.state;
     if (sessionStorage.getItem("register") === "successRegister") {
-      sessionStorage.removeItem("login");
+      axios.get("/api/users/clear-cookie").then(res => res.data);
       sessionStorage.removeItem("register");
       return <Redirect to="/login" />;
     }
