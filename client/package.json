@@ -28,10 +28,5 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "proxy": {
-    "/api/*": {
-      "target": "http://localhost:5000",
-      "secure": false
-    }
-  }
+  "proxy": "http://localhost:5000"
 }

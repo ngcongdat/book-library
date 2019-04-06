@@ -14,6 +14,11 @@ router.get("/cookie", controller.cookie);
 // @access  Public
 router.get("/clear-cookie", controller.clearCookie);
 
+// @route   get api/users/verify-user
+// @desc    Check user
+// @access  Private
+router.get("/verify-user", controller.verifyUser, controller.returnUser);
+
 // @route   POST api/users/register
 // @desc    Register user
 // @access  Public
@@ -23,10 +28,5 @@ router.post("/register", controller.register);
 // @desc    Login user
 // @access  Public
 router.post("/login", controller.login);
-
-// @route   get api/users/verify-user
-// @desc    Check user
-// @access  Private
-router.get("/verify-user", controller.verifyUser, controller.returnUser);
 
 module.exports = router;
