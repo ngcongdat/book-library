@@ -1,9 +1,12 @@
 const gravatar = require("gravatar");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const passport = require("passport");
 
 // Load validation
 const validateRegister = require("../validate/register.validate");
 const validateLogin = require("../validate/login.validate");
+const keys = require("../configs/key");
 
 // Load User model
 const User = require("../models/user.model");
@@ -20,6 +23,17 @@ module.exports.cookie = function(req, res) {
 // Clear cookie
 module.exports.clearCookie = function(req, res) {
   res.clearCookie("cookie");
+};
+
+// Verify User
+module.exports.verifyUser = passport.authenticate("jwt", { session: false });
+
+module.exports.returnUser = function(req, res) {
+  res.json({
+    id: req.user.id,
+    name: req.user.name,
+    email: req.user.email
+  });
 };
 
 // Register
@@ -87,7 +101,21 @@ module.exports.login = function(req, res) {
           maxAge: 90000,
           signed: true
         });
-        res.json({ msg: "Success" });
+
+        // Create JWT Payload
+        const payload = { id: user._id };
+
+        // Sign Token
+        jwt.sign(
+          payload,
+          keys.secretOrKey,
+          { expiresIn: 3600 },
+          (err, token) => {
+            res.json({
+              token: "Bearer " + token
+            });
+          }
+        );
       } else {
         errors.password = "Password incorrect";
         res.status(400).json(errors);

@@ -1,7 +1,6 @@
 const express = require("express");
-
+const passport = require("passport");
 const router = express.Router();
-
 // Load controller
 const controller = require("../../controllers/user.controller");
 
@@ -24,5 +23,10 @@ router.post("/register", controller.register);
 // @desc    Login user
 // @access  Public
 router.post("/login", controller.login);
+
+// @route   get api/users/verify-user
+// @desc    Check user
+// @access  Private
+router.get("/verify-user", controller.verifyUser, controller.returnUser);
 
 module.exports = router;
