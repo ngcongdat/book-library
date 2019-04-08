@@ -8,13 +8,11 @@ import {
   CardText,
   CardBody,
   CardTitle,
-  Button,
   Pagination,
   PaginationItem,
-  PaginationLink
+  PaginationLink,Dropdown, DropdownToggle, DropdownMenu, DropdownItem
 } from "reactstrap";
 import axios from "axios";
-import { Redirect } from "react-router";
 
 export default class Books extends Component {
   constructor(props) {
@@ -23,17 +21,24 @@ export default class Books extends Component {
       books: [],
       page: 1,
       perPage: 9,
-      logged: {}
+      logged: {},
+      dropdownOpen: false
     };
     this.changePages = this.changePages.bind(this);
     this.readBook = this.readBook.bind(this);
+    this.toggle = this.toggle.bind(this);
   }
 
   async componentDidMount() {
-    this.setState({
-      logged: await axios.get("/api/users/cookie").then(res => res.data),
-      books: await axios.get("/api/books/showbooks").then(res => res.data)
-    });
+    const jwt = localStorage.getItem('jwt');
+    if(!jwt) {
+      this.props.history.push('/login');
+    }
+    else{
+      this.setState({
+        books: await axios.get("/api/books/showbooks").then(res => res.data),
+      });
+    }
   }
 
   async changePages(e) {
@@ -58,14 +63,38 @@ export default class Books extends Component {
     });
   }
 
+  toggle() {
+    this.setState(prevState => ({
+      dropdownOpen: !prevState.dropdownOpen
+    }));
+  }
+
   render() {
-    const { books, logged } = this.state;
-    if (logged.login === false) {
-      return <Redirect to="/login" />;
-    }
+    const { books } = this.state;
+    // if (logged.login === false) {
+    //   return <Redirect to="/login" />;
+    // }
 
     return (
       <Container className="pt-4 pb-4">
+      <Row>
+        <Col>
+        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+          <DropdownToggle caret>
+            Dropdown
+          </DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem header>Logout</DropdownItem>
+            <DropdownItem>Some Action</DropdownItem>
+            <DropdownItem disabled>Action (disabled)</DropdownItem>
+            <DropdownItem divider />
+            <DropdownItem>Foo Action</DropdownItem>
+            <DropdownItem>Bar Action</DropdownItem>
+            <DropdownItem>Quo Action</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      </Col>
+      </Row>
         <Row>
           <Col className="text-center pb-4">
             <h1>Book Library</h1>

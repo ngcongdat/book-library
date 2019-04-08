@@ -11,7 +11,6 @@ import {
 } from "reactstrap";
 import axios from "axios";
 import classNames from "classnames";
-import { Redirect } from "react-router";
 
 export default class Register extends Component {
   constructor(props) {
@@ -46,7 +45,6 @@ export default class Register extends Component {
       .post("/api/users/register", newUser)
       .then(res => {
         console.log(res.config.data);
-        sessionStorage.setItem("register", "successRegister");
         this.setState(state => {
           return {
             name: "",
@@ -54,6 +52,8 @@ export default class Register extends Component {
             password: ""
           };
         });
+        localStorage.removeItem('jwt');
+        this.props.history.push('/login');
       })
       .catch(err =>
         this.setState({
@@ -63,11 +63,11 @@ export default class Register extends Component {
   }
   render() {
     const { errors } = this.state;
-    if (sessionStorage.getItem("register") === "successRegister") {
-      axios.get("/api/users/clear-cookie").then(res => res.data);
-      sessionStorage.removeItem("register");
-      return <Redirect to="/login" />;
-    }
+    // if (sessionStorage.getItem("register") === "successRegister") {
+    //   axios.get("/api/users/clear-cookie").then(res => res.data);
+    //   sessionStorage.removeItem("register");
+    //   return <Redirect to="/login" />;
+    // }
     return (
       <Container className="pt-4 pb-4">
         <Row>

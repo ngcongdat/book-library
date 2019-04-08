@@ -27,17 +27,17 @@ export default class Login extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  async componentDidMount() {
-    this.setState({
-      cookie: await axios.get("/api/users/cookie").then(res => res.data)
-    });
-  }
+  // async componentDidMount() {
+  //   this.setState({
+  //     cookie: await axios.get("/api/users/cookie").then(res => res.data)
+  //   });
+  // }
 
-  async componentDidUpdate() {
-    this.setState({
-      cookie: await axios.get("/api/users/cookie").then(res => res.data)
-    });
-  }
+  // async componentDidUpdate() {
+  //   this.setState({
+  //     cookie: await axios.get("/api/users/cookie").then(res => res.data)
+  //   });
+  // }
 
   onChange(e) {
     this.setState({
@@ -57,6 +57,8 @@ export default class Login extends Component {
       .post("/api/users/login", user)
       .then(res => {
         console.log(res.config.data);
+        localStorage.setItem('jwt', res.data.token)
+        this.props.history.push('/')
       })
       .catch(err =>
         this.setState({
@@ -66,8 +68,8 @@ export default class Login extends Component {
   }
 
   render() {
-    const { errors, cookie } = this.state;
-    if (cookie.login === true) {
+    const { errors } = this.state;
+    if (localStorage.getItem('jwt') !== null) {
       return <Redirect to="/" />;
     }
 
